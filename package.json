@@ -9,14 +9,15 @@
     "lint": "next lint",
     "build:pages": "npx @cloudflare/next-on-pages",
     "db:migrate-local": "tsx scripts/migrate.ts local",
-    "db:migrate-remote": "tsx scripts/migrate.ts remote",
+    "db:migrate-remote": "pnpm exec wrangler d1 migrations apply $DATABASE_NAME --remote && tsx scripts/migrate.ts remote",
     "webhook-test-server": "bun run scripts/webhook-test-server.ts",
-    "generate-test-data": "wrangler dev scripts/generate-test-data.ts",
-    "dev:cleanup": "wrangler dev --config wrangler.cleanup.json --test-scheduled",
+    "generate-test-data": "pnpm exec wrangler dev scripts/generate-test-data.ts",
+    "dev:cleanup": "pnpm exec wrangler dev --config wrangler.cleanup.json --test-scheduled",
     "test:cleanup": "curl http://localhost:8787/__scheduled",
-    "deploy:email": "wrangler deploy --config wrangler.email.json",
-    "deploy:cleanup": "wrangler deploy --config wrangler.cleanup.json",
-    "deploy:pages": "npm run build:pages && wrangler pages deploy .vercel/output/static --branch main"
+    "deploy:email": "pnpm exec wrangler deploy --config wrangler.email.json",
+    "deploy:cleanup": "pnpm exec wrangler deploy --config wrangler.cleanup.json",
+    "deploy:pages": "npm run build:pages && pnpm exec wrangler pages deploy .vercel/output/static --branch main",
+    "deploy": "pnpm dlx tsx scripts/deploy/index.ts"
   },
   "type": "module",
   "dependencies": {
@@ -68,6 +69,6 @@
     "tsx": "^4.19.3",
     "typescript": "^5",
     "vercel": "39.1.1",
-    "wrangler": "^4.26.1"
+    "wrangler": "4.26.1"
   }
 }
